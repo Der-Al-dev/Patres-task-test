@@ -36,7 +36,9 @@ def start():
             with open(db_path, 'w') as f:
                 pass
             print(f"Создана библиотека: {db_path} для управления создайте логин и пароль")
+    return db_path
 
+def create_first_librarian():
     # Запрос логина и пароля
     while True:
         email = input("Введите логин (e-mail): ").strip()
@@ -46,12 +48,9 @@ def start():
         else:
             break
     password = input("Введите пароль: ").strip()
-    librarian = Librarian(email=email)
-    librarian.set_password(password)
-    db.session.add(librarian)
-    db.session.commit()
     print(f"Библиотекарь с {email} успешно зарегистрирован.")
-    return db_path
+    return email, password
+
 
 def is_valid_email(email):
     # Простое регулярное выражение для проверки e-mail

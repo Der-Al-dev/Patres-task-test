@@ -6,7 +6,7 @@ from extensions import db
 readers_bp = Blueprint('readers', __name__, url_prefix='/readers')
 
 # Создание читателя (Create)
-@readers_bp.route('/readers', methods=['POST'])
+@readers_bp.route('', methods=['POST'])
 @jwt_required()
 def add_reader():
     data = request.get_json()
@@ -26,7 +26,7 @@ def add_reader():
     return jsonify({'msg': 'Reader added successfully', 'id': new_reader.id}), 201
 
 # Получение списка читателей (Read)
-@readers_bp.route('/readers', methods=['GET'])
+@readers_bp.route('', methods=['GET'])
 @jwt_required()
 def get_readers():
     readers = Reader.query.all()
@@ -40,7 +40,7 @@ def get_readers():
     return jsonify({'readers': readers_list}), 200
 
 # Получение одного читателя (Read)
-@readers_bp.route('/readers/<int:reader_id>', methods=['GET'])
+@readers_bp.route('/<int:reader_id>', methods=['GET'])
 @jwt_required()
 def get_reader(reader_id):
     reader = Reader.query.get(reader_id)
@@ -53,7 +53,7 @@ def get_reader(reader_id):
     }), 200
 
 # Обновление читателя (Update)
-@readers_bp.route('/readers/<int:reader_id>', methods=['PUT'])
+@readers_bp.route('/<int:reader_id>', methods=['PUT'])
 @jwt_required()
 def update_reader(reader_id):
     data = request.get_json()
@@ -77,7 +77,7 @@ def update_reader(reader_id):
     return jsonify({'msg': 'Reader updated successfully'}), 200
 
 # Удаление читателя (Delete)
-@readers_bp.route('/readers/<int:reader_id>', methods=['DELETE'])
+@readers_bp.route('/<int:reader_id>', methods=['DELETE'])
 @jwt_required()
 def delete_reader(reader_id):
     reader = Reader.query.get(reader_id)

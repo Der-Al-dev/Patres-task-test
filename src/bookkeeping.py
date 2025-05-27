@@ -4,7 +4,7 @@ from datetime import datetime
 from classes import Reader, Book, BorrowedBook
 from extensions import db
 
-borrow_bp = Blueprint('borrow', __name__, url_prefix='/borrow')
+borrow_bp = Blueprint('borrow', __name__)
 
 #  Эндпоинт выдачи книги читателю
 @borrow_bp.route('/borrow', methods=['POST'])
