@@ -1,15 +1,18 @@
+from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
-from sqlalchemy.orm import Session
+from jose import JWTError, jwt
 
-from models import User
-from database import get_db  # ваш способ получения сессии БД
-from config_app import SECRET_KEY, ALGORITHM
+from app.config_app import ALGORITHM, SECRET_KEY
+from app.database import get_db  # получение сессии БД
+from app.models import User
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/librarian/login")
 
-def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+
+def get_current_user(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -27,4 +30,3 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
     if user is None:
         raise credentials_exception
     return user
-
