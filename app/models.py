@@ -32,6 +32,7 @@ class Book(Base):
     year: Mapped[int] = mapped_column(nullable=True)
     isbn: Mapped[str] = mapped_column(unique=True, nullable=True)
     copies: Mapped[int] = mapped_column(default=1, nullable=False)
+    genre: Mapped[str] = mapped_column(String, nullable=True)
 
     __table_args__ = (
         CheckConstraint("copies >= 0", name="check_copies_positive"),

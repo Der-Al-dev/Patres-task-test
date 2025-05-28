@@ -26,6 +26,7 @@ class BookBase(BaseModel):
     copies: Optional[int] = Field(
         1, ge=0, description="Количество экземпляров"
     )
+    genre: Optional[str] = Field(None, description="Жанр")
 
 
 class BookCreate(BookBase):
