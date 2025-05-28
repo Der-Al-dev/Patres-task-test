@@ -1,7 +1,7 @@
-from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from sqlalchemy.orm import Session
 
 from app.config_app import ALGORITHM, SECRET_KEY
 from app.database import get_db  # получение сессии БД

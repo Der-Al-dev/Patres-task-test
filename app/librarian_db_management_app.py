@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from jose import jwt
@@ -7,10 +8,10 @@ from passlib.hash import bcrypt
 from sqlalchemy.orm import Session
 
 from app.config_app import ACCESS_TOKEN_EXPIRE_WEEKS, ALGORITHM, SECRET_KEY
+from app.database import get_db
 from app.dependencies import get_current_user
 from app.models import User
 from app.schemas import Token, UserCreate
-from app.database import get_db
 
 router = APIRouter(prefix="/librarian", tags=["librarian"])
 

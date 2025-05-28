@@ -2,6 +2,7 @@ import datetime
 from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
 
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
@@ -84,17 +85,15 @@ class BorrowedBookOut(BaseModel):
     class Config:
         from_attributes = True
 
-from pydantic import BaseModel
-from datetime import datetime
 
 class BorrowedBookWithTitleOut(BaseModel):
     id: int
     book_id: int
     reader_id: int
-    borrow_date: Optional[datetime]
-    return_date: Optional[datetime]
+    borrow_date: Optional[datetime.datetime]
+    return_date: Optional[datetime.datetime]
     title: str
     author: str
-    
+
     class Config:
         from_attributes = True

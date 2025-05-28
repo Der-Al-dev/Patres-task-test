@@ -1,11 +1,9 @@
 from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.dependencies import (  # get_current_user — зависимость для проверки JWT
-    get_current_user,
-    get_db,
-)
+from app.dependencies import get_current_user, get_db
 from app.models import Book
 from app.schemas import BookCreate, BookOut, BookUpdate
 

@@ -1,13 +1,20 @@
 from datetime import datetime
-from typing import Optional, List
-from sqlalchemy.orm import Session
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
 from app.dependencies import get_current_user, get_db  # JWT-аутентификация
 from app.models import Book, BorrowedBook, Reader
-from app.schemas import BorrowedBookOut, BorrowRequest, ReturnRequest, BorrowedBookWithTitleOut
+from app.schemas import (
+    BorrowedBookOut,
+    BorrowedBookWithTitleOut,
+    BorrowRequest,
+    ReturnRequest,
+)
 
 router = APIRouter(prefix="/borrow", tags=["borrow"])
+
 
 # Эндпоинт выдачи книги читателю
 @router.post("", response_model=BorrowedBookOut, status_code=200)
@@ -86,6 +93,7 @@ def return_book(
     db.commit()
     return {"msg": "Book successfully returned"}
 
+
 # Эндпоинт для списка взятых читателем книг
 @router.get("", response_model=List[BorrowedBookWithTitleOut])
 def list_borrowed_books_with_title(
@@ -93,11 +101,7 @@ def list_borrowed_books_with_title(
     current_user=Depends(get_current_user),
 ):
     """Получить список всех взятых книг с названиями."""
-    borrowed_books = (
-        db.query(BorrowedBook)
-        .join(Book)
-        .all()
-    )
+    borrowed_books = db.query(BorrowedBook).join(Book).all()
     return [
         {
             "id": borrowed.id,
@@ -106,7 +110,7 @@ def list_borrowed_books_with_title(
             "borrow_date": borrowed.borrow_date,
             "return_date": borrowed.return_date,
             "title": borrowed.book.title,
-            "author": borrowed.book.author
+            "author": borrowed.book.author,
         }
         for borrowed in borrowed_books
     ]

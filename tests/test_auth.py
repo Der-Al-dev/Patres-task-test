@@ -1,16 +1,17 @@
-import pytest
-from jose import jwt
 from fastapi import HTTPException
+from jose import jwt
+import pytest
+
+from app.config_app import ALGORITHM, SECRET_KEY
 from app.dependencies import get_current_user
 from app.models import User
-from app.config_app import SECRET_KEY, ALGORITHM
 
 
 def test_register(auth_client):
-    response = auth_client.post("/librarian/register", json={
-        "email": "new_user@example.com",
-        "password": "newpass"
-    })
+    response = auth_client.post(
+        "/librarian/register",
+        json={"email": "new_user@example.com", "password": "newpass"},
+    )
     assert response.status_code == 200
 
 
@@ -35,7 +36,7 @@ def test_get_current_user_success(db_session):
     user = User(
         email="test@example.com",
         password_hash="fakehashedpassword",
-        is_librarian=True
+        is_librarian=True,
     )
     db_session.add(user)
     db_session.commit()
@@ -51,7 +52,7 @@ def test_get_current_user_missing_sub(db_session):
     user = User(
         email="test2@example.com",
         password_hash="fakehashedpassword",
-        is_librarian=True
+        is_librarian=True,
     )
     db_session.add(user)
     db_session.commit()
@@ -66,7 +67,7 @@ def test_get_current_user_invalid_sub_value(db_session):
     user = User(
         email="test3@example.com",
         password_hash="fakehashedpassword",
-        is_librarian=True
+        is_librarian=True,
     )
     db_session.add(user)
     db_session.commit()
@@ -81,7 +82,7 @@ def test_get_current_user_invalid_token(db_session):
     user = User(
         email="test4@example.com",
         password_hash="fakehashedpassword",
-        is_librarian=True
+        is_librarian=True,
     )
     db_session.add(user)
     db_session.commit()

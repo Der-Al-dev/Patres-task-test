@@ -1,14 +1,15 @@
-import pytest
-from sqlalchemy import create_engine, inspect
-from sqlalchemy.orm import sessionmaker
 from fastapi.testclient import TestClient
-from app.main import app
-from app.database import get_db
-from app.models import Base, User
 from passlib.hash import bcrypt
+import pytest
 
 # Фикстура для создания тестовой БД в памяти и добавления первого пользователя
-from sqlalchemy import inspect
+from sqlalchemy import create_engine, inspect
+from sqlalchemy.orm import sessionmaker
+
+from app.database import get_db
+from app.main import app
+from app.models import Base, User
+
 
 @pytest.fixture(scope="module")
 def db_engine():
@@ -27,7 +28,9 @@ def db_engine():
     Session = sessionmaker(bind=engine)
     session = Session()
     password_hash = bcrypt.hash("qwe123")
-    session.add(User(email="first_librarian@library.com", password_hash=password_hash))
+    session.add(
+        User(email="first_librarian@library.com", password_hash=password_hash)
+    )
     session.commit()
     session.close()
 
@@ -36,6 +39,7 @@ def db_engine():
     print("\n=== Завершение фикстуры db_engine ===")
     Base.metadata.drop_all(engine)
 
+
 # Фикстура для тестовой сессии БД
 @pytest.fixture
 def db_session(db_engine):
@@ -43,6 +47,7 @@ def db_session(db_engine):
     session = Session()
     yield session
     session.close()
+
 
 # Фикстура для тестового клиента FastAPI с переопределением get_db
 @pytest.fixture
@@ -54,23 +59,26 @@ def client(db_engine):
             yield session
         finally:
             session.close()
+
     app.dependency_overrides[get_db] = override_get_db
     return TestClient(app)
+
 
 # Фикстура для авторизованного клиента
 @pytest.fixture
 def auth_client(client):
     response = client.post(
-        "/librarian/login",  
+        "/librarian/login",
         data={
-            "username": "first_librarian@library.com",  # или "email": "...", если ожидается email
+            "username": "first_librarian@library.com",
             "password": "qwe123",
-        }
+        },
     )
     assert response.status_code == 200, f"Failed to get token: {response.text}"
     token = response.json()["access_token"]
     client.headers.update({"Authorization": f"Bearer {token}"})
     return client
+
 
 # Фикстуры для init_db
 @pytest.fixture
@@ -78,6 +86,7 @@ def temp_data_dir(tmp_path):
     data_dir = tmp_path / "data"
     data_dir.mkdir()
     return data_dir
+
 
 @pytest.fixture
 def temp_db_path(temp_data_dir):
