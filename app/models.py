@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import CheckConstraint, ForeignKey, func
+from sqlalchemy import Integer, CheckConstraint, ForeignKey, func
 from sqlalchemy.orm import (
     Mapped,
     declarative_base,
@@ -25,7 +25,7 @@ class User(Base):
 class Book(Base):
     __tablename__ = "books"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     title: Mapped[str] = mapped_column(nullable=False)
     author: Mapped[str] = mapped_column(nullable=False)
     year: Mapped[int] = mapped_column(nullable=True)
@@ -40,7 +40,7 @@ class Book(Base):
 class Reader(Base):
     __tablename__ = "readers"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
 

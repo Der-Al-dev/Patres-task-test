@@ -36,8 +36,6 @@ def db_engine():
     print("\n=== Завершение фикстуры db_engine ===")
     Base.metadata.drop_all(engine)
 
-
-
 # Фикстура для тестовой сессии БД
 @pytest.fixture
 def db_session(db_engine):
@@ -73,3 +71,14 @@ def auth_client(client):
     token = response.json()["access_token"]
     client.headers.update({"Authorization": f"Bearer {token}"})
     return client
+
+# Фикстуры для init_db
+@pytest.fixture
+def temp_data_dir(tmp_path):
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    return data_dir
+
+@pytest.fixture
+def temp_db_path(temp_data_dir):
+    return temp_data_dir / "library.db"

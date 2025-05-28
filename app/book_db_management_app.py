@@ -19,13 +19,6 @@ def add_book(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    # Проверка уникальности ISBN (если указан)
-    if book.isbn:
-        existing = db.query(Book).filter(Book.isbn == book.isbn).first()
-        if existing:
-            raise HTTPException(
-                status_code=400, detail="Book with this ISBN already exists"
-            )
     if book.copies is not None and book.copies < 0:
         raise HTTPException(status_code=400, detail="Copies must be >= 0")
     new_book = Book(
@@ -76,13 +69,6 @@ def update_book(
         raise HTTPException(status_code=404, detail="Book not found")
     if book_data.copies is not None and book_data.copies < 0:
         raise HTTPException(status_code=400, detail="Copies must be >= 0")
-    # Проверка уникальности ISBN при обновлении
-    if book_data.isbn and book_data.isbn != book.isbn:
-        existing = db.query(Book).filter(Book.isbn == book_data.isbn).first()
-        if existing:
-            raise HTTPException(
-                status_code=400, detail="Book with this ISBN already exists"
-            )
     for field, value in book_data.dict(exclude_unset=True).items():
         setattr(book, field, value)
     db.commit()
